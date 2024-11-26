@@ -11,6 +11,5 @@ class HTMLNode():
     def props_to_html(self):
         result = ""
         for i in self.props:
-            result += " "
-            result += f"{i}=\"{self.props[i]}\""
-        return result[1:]
+            result += f" {i}=\"{self.props[i]}\""
+        return result

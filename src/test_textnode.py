@@ -12,7 +12,7 @@ class TestTextNode(unittest.TestCase):
     def test_not_eq(self):
         node = TextNode("This is not a text node", TextType.BOLD)
         node2 = TextNode("This is a text node", TextType.BOLD)
-        self.assertFalse(node, node2)
+        self.assertNotEqual(node, node2)
 
     def test_url_default_to_none(self):
         node = TextNode("This is a text node", TextType.BOLD, None)

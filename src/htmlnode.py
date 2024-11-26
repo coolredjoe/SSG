@@ -13,3 +13,6 @@ class HTMLNode():
         for i in self.props:
             result += f" {i}=\"{self.props[i]}\""
         return result
+    
+    def __repr__(self):
+        return f"{self.tag}\n{self.value}\n{self.children}\n{self.props}"

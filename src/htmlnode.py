@@ -40,11 +40,11 @@ class ParentNode(HTMLNode):
         result = ""
         if self.tag == None:
             raise ValueError("Tag can not be None")
-        if self.children = None:
+        if self.children == None:
             raise ValueError("Children can not be None")
         for i in self.children:
             result += i.to_html()
-        return f"<{self.tag}>" + result + f"</{self.tag}>"
+        return f"<{self.tag}{self.props_to_html()}>" + result + f"</{self.tag}>"
         
 
         

@@ -30,3 +30,42 @@ def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
     return matches
+
+def split_nodes_image(old_nodes):
+    pattern = r"!\[([^\]]*)\]\(([^)]+)\)"
+    result = []
+    for node in old_nodes:
+        text = node.text
+        index = 0
+        matches = re.finditer(pattern, text)
+        
+        for match in matches:
+            img_section = extract_markdown_images(text[match.start(): match.end()])
+            result.append(TextNode(img_section[0][0], TextType.IMAGE, img_section[0][1]))
+            if text[index: match.start()] != "":
+                result.append(TextNode(text[index: match.start()], TextType.TEXT))
+            index = match.end()
+        if text[index:] != "":
+            result.append(TextNode(text[index:], TextType.TEXT))
+    
+    return result
+
+
+def split_nodes_link(old_nodes):
+    pattern = r"\[([^\]]*)\]\(([^)]+)\)"
+    result = []
+    for node in old_nodes:
+        text = node.text
+        index = 0
+        matches = re.finditer(pattern, text)
+        
+        for match in matches:
+            link_section = extract_markdown_links(text[match.start(): match.end()])
+            result.append(TextNode(link_section[0][0], TextType.LINK, link_section[0][1]))
+            if text[index: match.start()] != "":
+                result.append(TextNode(text[index: match.start()], TextType.TEXT))
+            index = match.end()
+        if text[index:] != "":
+            result.append(TextNode(text[index:], TextType.TEXT))
+    
+    return result

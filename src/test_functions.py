@@ -6,6 +6,7 @@ from functions import (
     split_all_nodes,
     extract_markdown_images,
     extract_markdown_links,
+    markdown_to_blocks,
 )
 
 from textnode import TextNode, TextType
@@ -304,6 +305,22 @@ class TestInlineMarkdown(unittest.TestCase):
                 TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
                 TextNode(" and a ", TextType.TEXT),
                 TextNode("link", TextType.LINK, "https://boot.dev"),
+            ]
+        )
+
+    def test_md_to_block(self):
+        res = markdown_to_blocks("""# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item""")
+        self.assertEqual(
+            res, [
+                "# This is a heading",
+                "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+                "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
             ]
         )
 

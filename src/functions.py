@@ -73,3 +73,10 @@ def split_nodes_link(old_nodes):
 
 def split_all_nodes(old_nodes):
     return split_nodes_link(split_nodes_image(split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(old_nodes, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)))
+
+
+def markdown_to_blocks(markdown):
+    markdown_strings = markdown.split("\n\n")
+    result = [i.strip() for i in markdown_strings if i != ""]
+    return result
+

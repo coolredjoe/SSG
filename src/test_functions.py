@@ -7,6 +7,7 @@ from functions import (
     extract_markdown_images,
     extract_markdown_links,
     markdown_to_blocks,
+    block_to_block_type,
 )
 
 from textnode import TextNode, TextType
@@ -323,6 +324,46 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
                 "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
             ]
         )
+    
+    def test_block_to_block_type(self):
+        paragraph = "hello, this is a paragraph"
+        heading2 = "# hello, this is a heading"
+        heading = "###### hello, this is a heading too"
+        not_a_heading3 = "####### hello, this sadly isn't a heading, (1 too many # so should be paragraph)"
+        not_a_heading_either = "#This is not a heading too, since the # isn't followed by a space"
+        code_block = "```this is a codeblock```"
+        quote_block = "> this is a quote block"
+        quote_block2 = "> this is a quote block too\n> real and true\n> no joke"
+        not_a_quote = "> this may\nlook like a\nquote block\n> but isn't"
+        not_a_quote2 = ">nor is this one"
+        ul_block = "- this is a quote block"
+        ul_block2 = "* this is a quote block too\n- real and true\n* no joke"
+        not_a_ul = "* this may\nlook like a\nquote block\n* but isn't"
+        not_a_ul2 = "*nor is this one"
+        ol_block = "1. this is a quote block"
+        ol_block2 = "1. this is a quote block too\n2. real and true\n3. no joke"
+        not_a_ol = "1. this may\nlook like a\nquote block\n2. but isn't"
+        not_a_ol2 = "1.nor is this one"
+        self.assertEqual(block_to_block_type(paragraph), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_heading3), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_heading_either), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_quote), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_quote2), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_ul), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_ul2), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_ol), "paragraph")
+        self.assertEqual(block_to_block_type(not_a_ol2), "paragraph")
+        self.assertEqual(block_to_block_type(heading), "heading")
+        self.assertEqual(block_to_block_type(heading2), "heading")
+        self.assertEqual(block_to_block_type(code_block), "code")
+        self.assertEqual(block_to_block_type(quote_block), "quote")
+        self.assertEqual(block_to_block_type(quote_block2), "quote")
+        self.assertEqual(block_to_block_type(ul_block), "unordered_list")
+        self.assertEqual(block_to_block_type(ul_block2), "unordered_list")
+        self.assertEqual(block_to_block_type(ol_block), "ordered_list")
+        self.assertEqual(block_to_block_type(ol_block2), "ordered_list")
+        
+
 
 if __name__ == "__main__":
     unittest.main()

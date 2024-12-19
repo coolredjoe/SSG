@@ -81,21 +81,24 @@ def markdown_to_blocks(markdown):
     return result
 
 def block_to_block_type(block):
-    heading_pattern = r"#{1,6} .*"
+    heading_pattern = r"^#{1,6} .*"
     
     if bool(re.search(heading_pattern, block)):
         return "heading"
     elif block.startswith("```") and block.endswith("```"):
         return "code"
-    elif check_newline_followed_by_char(block, "> "):
+    elif check_newline_followed_by_char(block, r"^> "):
         return "quote"
-    elif check_newline_followed_by_char(block, "* ") or check_newline_followed_by_char(block, "- "):
+    elif check_newline_followed_by_char(block, r"^[*|-] "):
         return "unordered_list"
-    elif check_newline_followed_by_char(block, r"\d+\. "):  
+    elif check_newline_followed_by_char(block, r"^\d+\. "):  
         return "ordered_list"
     else:
         return "paragraph"
 
 def check_newline_followed_by_char(text, char):
-    pattern = rf'\n{re.escape(char)}'
-    return bool(re.match(f'^[^{pattern}]*({pattern}[^{pattern}]*)*$', text))
+    lines = text.split('\n')
+    for line in lines:
+        if not bool(re.search(char, line)):
+            return False
+    return True

@@ -1,4 +1,5 @@
 from textnode import TextNode, TextType
+from htmlnode import HTMLNode, LeafNode, ParentNode
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -102,3 +103,31 @@ def check_newline_followed_by_char(text, char):
         if not bool(re.search(char, line)):
             return False
     return True
+
+def markdown_to_html_node(markdown):
+    blocks_ls = markdown_to_blocks(markdown)
+    nodes = []
+    for block in blocks_ls:
+        block_type = block_to_block_type(block)
+        match block_type:
+            case "paragraph":
+                node = paragraph(block)
+            case "code":
+                node = LeafNode("code", block)
+            case "heading":
+                node = LeafNode("h", block)
+            case "ordered_list":
+                pass
+            case "unordered_list":
+                pass
+            case "quote":
+                pass
+            case _:
+                pass
+
+
+def paragraph(block):
+    return LeafNode("p", block)
+
+def code(block):
+    
